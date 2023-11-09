@@ -1,3 +1,10 @@
 <?php
 
-echo 'Welcome to the bakery online ordering and delivery system';
+    require_once 'scripts/dbconfig.php';
+
+    $client = new BakeryDBClient;
+
+    $result = $client->userLogin('azanda', 'azanda123');
+
+
+    echo 'Login: '.$result;
