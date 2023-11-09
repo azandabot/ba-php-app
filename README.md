@@ -45,7 +45,7 @@ Project Checklist
 
 Let's break down the tasks you need to tackle to set up the application successfully. Mark each item as you complete it:
 
--   [ ]  Interface Design: Craft user-friendly interfaces for both users and bakery owners.
+-   [ x ]  Interface Design: Craft user-friendly interfaces for both users and bakery owners.
 -   [ ]  User Authentication: Implement secure login functionality.
 -   [ ]  Order Placement: Allow users to easily place orders.
 -   [ ]  Delivery Scheduling: Enable users to schedule deliveries.
