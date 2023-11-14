@@ -32,7 +32,7 @@ class BakeryDBClient {
             $stmt->bindParam(1, $user);
             $stmt->bindParam(2, $pwd);
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result['aMsg'];
         }catch(PDOException $ex){
             print_r($ex);
@@ -48,8 +48,7 @@ class BakeryDBClient {
             $stmt->bindParam(2, $email);
             $stmt->bindParam(3, $password);
             $stmt->bindParam(4, $role);
-            $result = $stmt->execute();
-            if($result){
+            if($stmt->execute()){
                 return true;
             }
 

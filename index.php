@@ -1,10 +1,5 @@
 <?php
 
-    require_once 'scripts/dbconfig.php';
+    require_once 'scripts/session.php';
 
-    $client = new BakeryDBClient;
-
-    $result = $client->userLogin('azanda', 'azanda123');
-
-
-    echo 'Login: '.$result;
+    require_once 'app/'.$sys_location;
