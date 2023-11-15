@@ -29,7 +29,7 @@ $orders = $client->getAllOrders();
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Qty</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">OrderedAt</th>
-                                <th class="text-secondary opacity-7"></th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,10 +43,10 @@ $orders = $client->getAllOrders();
                                         </div>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0"><?php echo 'R'.$order['quantity']; ?></p>
+                                        <p class="text-xs font-weight-bold mb-0"><?php echo 'x'.$order['qty']; ?></p>
                                     </td>
                                     <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm <?php echo ($order['status'] == 'Pending') ? 'bg-gradient-success' : (($order['status'] == 'In Progress') ? 'bg-gradient-secondary' : 'bg-gradient-danger'); ?>">
+                                        <span class="badge badge-sm <?php echo ($order['status'] == 'Delivered') ? 'bg-gradient-success' : (($order['status'] == 'In Progress') ? 'bg-gradient-secondary' : 'bg-gradient-danger'); ?>">
                                             <?php echo $order['status']; ?>
                                         </span>
                                     </td>
@@ -54,8 +54,11 @@ $orders = $client->getAllOrders();
                                         <span class="text-secondary text-xs font-weight-bold"><?php echo $order['created_at']; ?></span>
                                     </td>
                                     <td class="align-middle">
-                                        <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-orders.php&page=Update Order&operation=2&orderId=<?php echo $order['id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
+                                        <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-orders.php&page=Update Order&operation=2&orderId=<?php echo $order['id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit order">
+                                            <i class="fas fa-edit me-1"></i> Edit
+                                        </a>
+                                        <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-orders.php&page=Delete Order&operation=3&orderId=<?php echo $order['id']; ?>&order=<?= $order['item_name']; ?>" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete order">
+                                            <i class="fas fa-trash-alt ms-1"></i> Delete
                                         </a>
                                     </td>
                                 </tr>

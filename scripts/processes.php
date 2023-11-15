@@ -80,11 +80,12 @@ function process_order($data)
 
         if ($operation === "1") {
             # create
-            $res = $client->makeOrder($_SESSION['logged_user_id'], $formdata['edtItem'], $formdata['edtQty'], 'Y', $formdata['edtInstructions']);
+            $res = $client->makeOrder($_SESSION['logged_user_id'], $formdata['edtItem'], $formdata['edtQty'], 'In Progress', $formdata['edtInstructions']);
             if ($res) {
                 echo json_encode([
                     'success' => true,
-                    'message' => 'Order Placed Successfully!'
+                    'message' => 'Order Placed Successfully!',
+                    'reload' => true, 
                 ]);
                 exit();
             }
@@ -94,13 +95,31 @@ function process_order($data)
                 'message' => 'Could not Place Order. Please try again later...'
             ]);
             exit();
-        } else {
-            # edit
-            $res = $client->updateOrder($formdata['edtOrderId'], $_SESSION['logged_user_id'], $formdata['edtItem'], $formdata['edtQty'], 'Y', $formdata['edtInstructions']);
+        } elseif ($operation === "3") {
+            # delete
+            $res = $client->deleteOrder($formdata['edtOrderId']);
             if ($res) {
                 echo json_encode([
                     'success' => true,
-                    'message' => 'Order Details Updated Successfully!'
+                    'message' => 'Order Deleted Successfully!',
+                    'reload' => true, 
+                ]);
+                exit();
+            }
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Could not Delete Order. Please try again later...'
+            ]);
+            exit();
+        } else {
+            # edit - update
+            $res = $client->updateOrder($formdata['edtOrderId'], $_SESSION['logged_user_id'], $formdata['edtItem'], $formdata['edtQty'], $formdata['edtStatus'], $formdata['edtInstructions']);
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Order Details Updated Successfully!',
+                    'reload' => true, 
                 ]);
                 exit();
             }
@@ -119,6 +138,7 @@ function process_order($data)
         exit();
     }
 }
+
 
 function process_menu($data)
 {

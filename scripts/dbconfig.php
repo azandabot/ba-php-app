@@ -89,6 +89,19 @@ class BakeryDBClient {
             print_r($ex);
         }
     }
+
+    public function getOrder($orderId){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getOrderDetails(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $orderId);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
     
 
     public function createUser($username, $email, $password, $role) {
