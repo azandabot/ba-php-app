@@ -1,21 +1,9 @@
 <?php
-  require_once 'scripts/processes.php';
 
   if(@$_SESSION['logged_user']){
     header('Location: index.php?route=dashboard.php');
+    exit();
   }
-
-  if(isset($_SESSION['msg'])){
-    $msg = $_SESSION['msg'];
-    $_SESSION['msg'] = '';
-  }
-
-  if(isset($_POST['edtUsername'])){
-    $log_location = process_sign($_POST);
-
-    header('Location: index.php?route='.$log_location);
-  }
-
 
 ?>
 <!DOCTYPE html>
@@ -54,40 +42,39 @@
                   <p class="mb-0">Enter your email and password to register</p>
                 </div>
                 <div class="card-body">
-                  <form method="POST" action="">
-                    <?php if(@$msg): ?>
-                      <span class="small font-weight-bold text-danger"><?php echo $msg; ?></span>
-                    <?php endif; ?>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Username</label>
-                      <input type="text" name="edtUsername" class="form-control">
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Email</label>
-                      <input type="email" name="edtUserEmail" class="form-control">
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Password</label>
-                      <input type="password" name="edtUserPassword" class="form-control">
-                    </div>
-                    <div class="form-check form-check-info text-start ps-0">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                      <label class="form-check-label" for="flexCheckDefault">
-                        I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
-                      </label>
-                    </div>
-                    <input type="hidden" name="sign" value="2">
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
-                    </div>
-                  </form>
-                </div>
-                <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="mb-2 text-sm mx-auto">
-                    Already have an account?
-                    <a href="index.php?route=sign-in.php" class="text-primary font-weight-bold">Sign in</a>
-                  </p>
-                </div>
+                                    <div id="alert" class="alert text-white" role="alert"></div>
+                                    <form id="signUpForm">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <label class="form-label">Username</label>
+                                            <input type="text" name="edtUsername" class="form-control" required>
+                                        </div>
+                                        <div class="input-group input-group-outline mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="edtUserEmail" class="form-control" required>
+                                        </div>
+                                        <div class="input-group input-group-outline mb-3">
+                                            <label class="form-label">Password</label>
+                                            <input type="password" name="edtUserPassword" class="form-control" required>
+                                        </div>
+                                        <div class="form-check form-check-info text-start ps-0">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
+                                            </label>
+                                        </div>
+                                        <input type="hidden" name="sign" value="2">
+                                        <div class="text-center">
+                                            <button type="button" id="signUpBtn" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                                    <p class="mb-2 text-sm mx-auto">
+                                        Already have an account?
+                                        <a href="index.php?route=sign-in.php" class="text-primary font-weight-bold">Sign in</a>
+                                    </p>
+                                </div>
+                
               </div>
             </div>
           </div>
@@ -109,10 +96,48 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#alert").hide();
+
+            $("#signUpBtn").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "scripts/execute_process.php?process=sign",
+                    data: $("#signUpForm").serialize(),
+                    dataType: "json",
+                    success: function (response) {
+                        display_response(response.message, response.success);
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    },
+                    error: function () {
+                        display_response("An error occurred", false);
+                    },
+                });
+            });
+
+            function display_response(message, success) {
+                var alertDiv = $("#alert");
+                alertDiv.removeClass("alert-success alert-danger");
+                alertDiv.text(message);
+
+                if (success) {
+                    alertDiv.addClass("alert-success");
+                } else {
+                    alertDiv.addClass("alert-danger");
+                }
+
+                alertDiv.show();
+            }
+        });
+    </script>
+
 </body>
 
 </html>

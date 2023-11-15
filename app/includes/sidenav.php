@@ -7,12 +7,12 @@
     $pages = [
         'dashboard.php' => 'Dashboard',
         'dashboard.php&tmpl_page=pages/orders.php&page=Orders' => 'Orders',
-        'dashboard.php&tmpl_page=deliveries.php&page=Deliveries' => 'Deliveries',
-        'dashboard.php&tmpl_page=dashboard-tracking.php&page=Tracking' => 'Tracking',
-        'dashboard.php&tmpl_page=menus.php&page=Menus' => 'Menus',
-        'dashboard.php&tmpl_page=prices.php&page=Prices' => 'Prices',
-        'dashboard.php&tmpl_page=discounts.php&page=Discounts' => 'Discounts',
-        'dashboard.php&tmpl_page=inventory.php&page=Inventory' => 'Inventory'
+        'dashboard.php&tmpl_page=pages/deliveries.php&page=Deliveries' => 'Deliveries',
+        'dashboard.php&tmpl_page=pages/dashboard-tracking.php&page=Tracking' => 'Tracking',
+        'dashboard.php&tmpl_page=pages/menus.php&page=Menus' => 'Menus',
+        'dashboard.php&tmpl_page=pages/prices.php&page=Prices' => 'Prices',
+        'dashboard.php&tmpl_page=pages/discounts.php&page=Discounts' => 'Discounts',
+        'dashboard.php&tmpl_page=pages/inventory.php&page=Inventory' => 'Inventory'
     ];
 
 ?>

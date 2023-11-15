@@ -1,25 +1,8 @@
 <?php
-  require_once 'scripts/processes.php';
 
   if(@$_SESSION['logged_user']){
     header('Location: index.php?route=dashboard.php');
   }
-
-  if(isset($_SESSION['msg'])){
-    $msg = $_SESSION['msg'];
-    $status = $_SESSION['status'] ? 'text-success' : 'text-danger';
-
-    $_SESSION['msg'] = '';
-    $_SESSION['status'] = '';
-  }
-  
-
-  if(isset($_POST['edtUsername'])){
-    $log_location = process_sign($_POST);
-
-    header('Location: index.php?route='.$log_location);
-  }
-
 
 ?>
 <!DOCTYPE html>
@@ -57,32 +40,30 @@
                 </div>
               </div>
               <div class="card-body">
-                <form method="POST" action="" class="text-start">
-                  <?php if(@$msg): ?>
-                    <span class="small font-weight-bold <?php echo $status; ?>"><?php echo $msg; ?></span>
-                  <?php endif; ?>
-                  <div class="input-group input-group-outline my-3">
-                    <label class="form-label">Username / Email</label>
-                    <input type="text" name="edtUsername" class="form-control">
-                  </div>
-                  <div class="input-group input-group-outline mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="edtUserPassword" class="form-control">
-                  </div>
-                  <div class="form-check form-switch d-flex align-items-center mb-3">
-                    <input class="form-check-input" type="checkbox" name="rememberMe" checked>
-                    <label class="form-check-label mb-0 ms-3" for="rememberMe">Remember me</label>
-                  </div>
-                  <input type="hidden" name="sign" value="1">
-                  <div class="text-center">
-                    <button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
-                  </div>
-                  <p class="mt-4 text-sm text-center">
-                    Don't have an account?
-                    <a href="index.php?route=sign-up.php" class="text-primary font-weight-bold">Sign up</a>
-                  </p>
-                </form>
-              </div>
+                                <div id="alert" class="alert text-white" role="alert"></div>
+                                <form id="signInForm" class="text-start">
+                                    <div class="input-group input-group-outline my-3">
+                                        <label class="form-label">Username / Email</label>
+                                        <input type="text" name="edtUsername" class="form-control" required>
+                                    </div>
+                                    <div class="input-group input-group-outline mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" name="edtUserPassword" class="form-control" required>
+                                    </div>
+                                    <div class="form-check form-switch d-flex align-items-center mb-3">
+                                        <input class="form-check-input" type="checkbox" name="rememberMe" checked>
+                                        <label class="form-check-label mb-0 ms-3" for="rememberMe">Remember me</label>
+                                    </div>
+                                    <input type="hidden" name="sign" value="1">
+                                    <div class="text-center">
+                                        <button type="button" id="signInBtn" class="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
+                                    </div>
+                                    <p class="mt-4 text-sm text-center">
+                                        Don't have an account?
+                                        <a href="index.php?route=sign-up.php" class="text-primary font-weight-bold">Sign up</a>
+                                    </p>
+                                </form>
+                            </div>
             </div>
           </div>
         </div>
@@ -104,10 +85,47 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#alert").hide();
+
+            $("#signInBtn").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "scripts/execute_process.php?process=sign",
+                    data: $("#signInForm").serialize(),
+                    dataType: "json",
+                    success: function (response) {
+                        display_response(response.message, response.success);
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    },
+                    error: function () {
+                        display_response("An error occurred", false);
+                    },
+                });
+            });
+
+            function display_response(message, success) {
+                var alertDiv = $("#alert");
+                alertDiv.removeClass("alert-success alert-danger");
+                alertDiv.text(message);
+
+                if (success) {
+                    alertDiv.addClass("alert-success");
+                } else {
+                    alertDiv.addClass("alert-danger");
+                }
+
+                alertDiv.show();
+            }
+        });
+    </script>
 </body>
 
 </html>

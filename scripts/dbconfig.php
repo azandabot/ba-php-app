@@ -39,6 +39,58 @@ class BakeryDBClient {
         }
     }
 
+    public function getLoggedUserId($username){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getLoggedUserId(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $username);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['aUserId'];
+        }catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
+    public function getMenuItems(){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getMenuItems()';
+            $stmt = $con->prepare($query);
+            $stmt->execute();
+            return $stmt;
+        }catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
+    public function getAllOrders() {
+        try {
+            $con = $this->getConnection();
+            $query = 'CALL sp_getAllOrders()'; 
+            $stmt = $con->prepare($query);
+            $stmt->execute();
+            return $stmt;
+        } catch (PDOException $ex) {
+            print_r($ex);
+        }
+    }
+
+    public function getMenuItem($itemId){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getMenuItem(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $itemId);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+    
+
     public function createUser($username, $email, $password, $role) {
         try {
             $con = $this->getConnection();
@@ -255,8 +307,7 @@ class BakeryDBClient {
             $query = 'CALL pd_DeleteItem(?)';
             $stmt = $con->prepare($query);
             $stmt->bindParam(1, $itemId);
-            $result = $stmt->execute();
-            if ($result) {
+            if($stmt->execute()){
                 return true;
             }
             return false;
