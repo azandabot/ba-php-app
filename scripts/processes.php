@@ -147,9 +147,9 @@ function process_menu($data)
         $formdata = cleanFormData($data);
 
         $operation = $formdata['operation'];
-        $itemName = $formdata['edtItemName'];
+        $itemName = @$formdata['edtItemName'];
         $itemPrice = $formdata['edtItemPrice'];
-        $available = $formdata['edtAvailable'];
+        $available = @$formdata['edtAvailable'];
 
         if ($operation === "1") {
             $discount = 0.00;
@@ -205,6 +205,23 @@ function process_menu($data)
                 ]);
                 exit();
             }
+        } else if ($operation === 'update_price'){
+            $itemId = $formdata['item_id'];
+            $res = $client->updateItemPrice($itemId, $itemPrice);
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Menu Item Price Updated Successfully!',
+                    'link' => 'index.php?route=dashboard.php&tmpl_page=pages/manage-menus.php&page=Update%20Menu%20Item&operation=2&itemId='.$itemId
+                ]);
+                exit();
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Could not Update Menu Item Price. Please try again later...'
+                ]);
+                exit();
+            }
         }
     } catch (Exception $ex) {
         echo json_encode([
@@ -214,5 +231,82 @@ function process_menu($data)
         exit();
     }
 }
+
+function process_delivery($data)
+{
+    try {
+        $client = new BakeryDBClient;
+        $formdata = cleanFormData($data);
+
+        $operation = $formdata['operation'];
+
+        if ($operation === "1") {
+            # create
+            $res = $client->createDelivery($_SESSION['logged_user_id'], $formdata['edtItem'],  $formdata['edtDate'], $formdata['edtQty'], $formdata['edtInstructions']);
+            
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Delivery Scheduled Successfully!',
+                ]);
+                exit();
+            }
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Could not Schedule Delivery. Please try again later...'
+            ]);
+            exit();
+        } elseif ($operation === "3") {
+            # delete
+            $res = $client->deleteDelivery($formdata['edtDeliveryId']);
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Delivery Deleted Successfully!',
+                    'reload' => true, 
+                ]);
+                exit();
+            }
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Could not Delete Delivery. Please try again later...'
+            ]);
+            exit();
+        } else {
+            # edit - update
+            $res = $client->updateDelivery(
+                $formdata['edtDeliveryId'],
+                $_SESSION['logged_user_id'],
+                $formdata['edtItem'],
+                $formdata['edtDate'],
+                $formdata['edtQty'],
+                $formdata['edtStatus'],
+                $formdata['edtInstructions']
+            );
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Delivery Details Updated Successfully!',
+                ]);
+                exit();
+            }
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Could not Update Delivery Details. Please try again later...'
+            ]);
+            exit();
+        }
+    } catch (Exception $ex) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'An error occurred'
+        ]);
+        exit();
+    }
+}
+
 
 ?>

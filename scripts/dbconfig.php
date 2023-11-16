@@ -1,5 +1,7 @@
 <?php
 
+require_once 'session.php';
+
 class BakeryDBClient {
     
     # connection details
@@ -53,6 +55,77 @@ class BakeryDBClient {
         }
     }
 
+    public function getOrdersForUser($user_id = null)
+    {
+        try {
+            $con = $this->getConnection();
+            $user_id = $user_id ?: ($_SESSION['logged_user_id'] ?? 0);
+    
+            $query = 'CALL sp_getOrdersForUser(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $user_id);
+            $stmt->execute();
+            return $stmt;
+        } catch (PDOException $ex) {
+            print_r($ex);
+        }
+    }
+
+    public function getDeliveriesForUser($user_id = null)
+    {
+        try {
+            $con = $this->getConnection();
+            $user_id = $user_id ?: ($_SESSION['logged_user_id'] ?? 0);
+    
+            $query = 'CALL sp_getDeliveriesForUser(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $user_id);
+            $stmt->execute();
+            return $stmt;
+        } catch (PDOException $ex) {
+            print_r($ex);
+        }
+    }
+
+    public function getStockSoldOverOrders($item_id){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getStockSoldOverOrders(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $item_id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
+    public function calculateStock($item_id, $total_stock)
+    {
+        try {
+            $stockStatus = $this->getStockSoldOverOrders($item_id);
+
+            // Calculate stock utilization, reorder recommendation, and sales velocity
+            $stockUtilization = ($stockStatus['TotalQty'] / $total_stock) * 100;
+            $reorderRecommendation = ($stockStatus['TotalQty'] < $total_stock / 2) ? 'Yes' : 'No';
+            $salesVelocity = ($stockStatus['TotalQty'] > 0) ? $stockStatus['TotalSales'] / $stockStatus['TotalQty'] : 0;
+
+            // Prepare data for JSON response
+            $response = [
+                'totalSales' => $stockStatus['TotalSales'],
+                'totalQty' => $stockStatus['TotalQty'],
+                'stockUtilization' => $stockUtilization,
+                'reorderRecommendation' => $reorderRecommendation,
+                'salesVelocity' => $salesVelocity
+            ];
+
+            return json_encode($response);
+        } catch (Exception $ex) {
+            print_r($ex);
+        }
+    }
+    
+
     public function getMenuItems(){
         try{
             $con = $this->getConnection();
@@ -76,6 +149,32 @@ class BakeryDBClient {
             print_r($ex);
         }
     }
+
+    public function getDeliveries(){
+        try {
+            $con = $this->getConnection();
+            $query = 'CALL sp_getDeliveries()'; 
+            $stmt = $con->prepare($query);
+            $stmt->execute();
+            return $stmt;
+        } catch (PDOException $ex) {
+            print_r($ex);
+        }
+    }
+
+    public function getDelivery($deliveryId){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getDelivery(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $deliveryId);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
 
     public function getMenuItem($itemId){
         try{
@@ -181,6 +280,23 @@ class BakeryDBClient {
         }
     }
     
+    public function updateItemPrice($itemId, $itemPrice){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL pu_UpdateItemPrice(?,?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $itemId);
+            $stmt->bindParam(2, $itemPrice);
+            $result = $stmt->execute();
+            if ($result) {
+                return true;
+            }
+            return false;
+        }catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
     public function updateOrder($orderId, $userId, $itemId, $qty, $status, $instructions) {
         try {
             $con = $this->getConnection();
@@ -238,17 +354,18 @@ class BakeryDBClient {
         }
     }
     
-    public function updateDelivery($deliveryId, $userId, $itemId, $date, $qty, $instructions) {
+    public function updateDelivery($deliveryId, $userId, $itemId, $date, $qty, $status, $instructions) {
         try {
             $con = $this->getConnection();
-            $query = 'CALL pu_UpdateDelivery(?, ?, ?, ?, ?, ?)';
+            $query = 'CALL pu_UpdateDelivery(?, ?, ?, ?, ?, ?, ?)';
             $stmt = $con->prepare($query);
             $stmt->bindParam(1, $deliveryId);
             $stmt->bindParam(2, $userId);
             $stmt->bindParam(3, $itemId);
             $stmt->bindParam(4, $date);
             $stmt->bindParam(5, $qty);
-            $stmt->bindParam(6, $instructions);
+            $stmt->bindParam(6, $status);
+            $stmt->bindParam(7, $instructions);
             $result = $stmt->execute();
             if ($result) {
                 return true;

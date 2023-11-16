@@ -2,14 +2,22 @@
 require_once 'scripts/dbconfig.php';
 $client = new BakeryDBClient;
 
+$isDiscount = (@$_GET['tblView'] === 'discount') ? true : false;
+
 $menus = $client->getMenuItems();
 ?>
 <div class="row">
     <div class="col-12">
         <div class="d-flex justify-content-end mb-3">
-            <a class="btn btn-primary btn-sm" href="index.php?route=dashboard.php&tmpl_page=pages/manage-menus.php&page=New Menu Item&operation=1">
-                <i class="fas fa-plus me-2"></i> New Item
-            </a>
+            <?php if(!$isDiscount): ?>
+                <a class="btn btn-primary btn-sm" href="index.php?route=dashboard.php&tmpl_page=pages/manage-menus.php&page=New Menu Item&operation=1">
+                    <i class="fas fa-plus me-2"></i> New Item
+                </a>
+            <?php else: ?>
+                <a class="btn btn-primary btn-sm" href="index.php?route=dashboard.php&tmpl_page=pages/menus.php&page=Menus">
+                    <i class="fas fa-arrow-right me-2"></i> View All Menu Items
+                </a>
+            <?php endif; ?>
         </div>
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -30,7 +38,42 @@ $menus = $client->getMenuItems();
         </tr>
     </thead>
     <tbody>
-        <?php while($menu = $menus->fetch(PDO::FETCH_ASSOC)): ?>
+        <?php if($isDiscount): ?>
+            <?php while ($menu = $menus->fetch(PDO::FETCH_ASSOC)) : ?>
+                <?php if ($menu['discount'] > 0) : ?>
+                    <tr>
+                        <td>
+                            <div class="d-flex px-2 py-1">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="mb-0 text-sm"><?php echo $menu['item_name']; ?></h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="text-xs font-weight-bold mb-0">R<?= $menu['item_price']; ?></p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <span class="badge badge-sm <?= $menu['available'] == 'Y' ? 'bg-gradient-success' : 'bg-gradient-danger'; ?>">
+                                <?= $menu['available'] == 'Y' ? 'Yes' : 'No'; ?>
+                            </span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold"><?= $menu['discount'] == 0 ? 'N/A' : $menu['discount']; ?></span>
+                        </td>
+                        <td class="align-middle">
+                            <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-menus.php&page=Update Menu Item&operation=2&itemId=<?= $menu['id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit menu">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </a>
+                            <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-menus.php&page=Delete Menu Item&operation=3&itemId=<?= $menu['id']; ?>&item=<?= $menu['item_name']; ?>" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete menu">
+                                <i class="fas fa-trash-alt ms-1"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endwhile; ?>
+
+        <?php else: ?> 
+            <?php while($menu = $menus->fetch(PDO::FETCH_ASSOC)): ?>
             <tr>
                 <td>
                     <div class="d-flex px-2 py-1">
@@ -60,6 +103,8 @@ $menus = $client->getMenuItems();
                 </td>
             </tr>
         <?php endwhile; ?>
+        <?php endif; ?>
+        
     </tbody>
 </table>
 

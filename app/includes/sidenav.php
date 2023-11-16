@@ -10,8 +10,8 @@
         'dashboard.php&tmpl_page=pages/deliveries.php&page=Deliveries' => 'Deliveries',
         'dashboard.php&tmpl_page=pages/dashboard-tracking.php&page=Tracking' => 'Tracking',
         'dashboard.php&tmpl_page=pages/menus.php&page=Menus' => 'Menus',
-        'dashboard.php&tmpl_page=pages/prices.php&page=Prices' => 'Prices',
-        'dashboard.php&tmpl_page=pages/discounts.php&page=Discounts' => 'Discounts',
+        'dashboard.php&tmpl_page=pages/manage-prices.php&page=Prices' => 'Prices',
+        'dashboard.php&tmpl_page=pages/menus.php&page=Discounts&tblView=discount' => 'Discounts',
         'dashboard.php&tmpl_page=pages/inventory.php&page=Inventory' => 'Inventory'
     ];
 

@@ -9,6 +9,8 @@
             process_menu($_POST);
             break;
 
+
+        
         case 'order':
             process_order($_POST);
             break;
@@ -16,11 +18,11 @@
         case 'sign':
             process_sign($_POST);
             break;
-
-        // Add more cases for other processes as needed
+        case 'delivery':
+            process_delivery($_POST);
+            break;
 
         default:
-            // Handle invalid process
             echo json_encode(['message' => 'Invalid process', 'success' => false]);
             break;
 }
