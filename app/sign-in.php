@@ -94,22 +94,33 @@
             $("#alert").hide();
 
             $("#signInBtn").click(function () {
-                $.ajax({
-                    type: "POST",
-                    url: "scripts/execute_process.php?process=sign",
-                    data: $("#signInForm").serialize(),
-                    dataType: "json",
-                    success: function (response) {
-                        display_response(response.message, response.success);
-                        if (response.redirect) {
-                            window.location.href = response.redirect;
-                        }
-                    },
-                    error: function () {
-                        display_response("An error occurred", false);
-                    },
-                });
-            });
+              // Validate username and password length
+              var username = $("#username").val();
+              var password = $("#password").val();
+
+              if (username.length < 6 || password.length < 6) {
+                  // Display an error message for invalid length
+                  display_response("Username and password must be at least 6 characters long.", false);
+                  return;
+              }
+
+              // If validation passes, make the AJAX request
+              $.ajax({
+                  type: "POST",
+                  url: "scripts/execute_process.php?process=sign",
+                  data: $("#signInForm").serialize(),
+                  dataType: "json",
+                  success: function (response) {
+                      display_response(response.message, response.success);
+                      if (response.redirect) {
+                          window.location.href = response.redirect;
+                      }
+                  },
+                  error: function () {
+                      display_response("An error occurred", false);
+                  },
+              });
+          });
 
             function display_response(message, success) {
                 var alertDiv = $("#alert");
