@@ -44,11 +44,11 @@
                                 <form id="signInForm" class="text-start">
                                     <div class="input-group input-group-outline my-3">
                                         <label class="form-label">Username / Email</label>
-                                        <input type="text" name="edtUsername" class="form-control" required>
+                                        <input type="text" name="edtUsername" id="edtUsername" class="form-control" required>
                                     </div>
                                     <div class="input-group input-group-outline mb-3">
                                         <label class="form-label">Password</label>
-                                        <input type="password" name="edtUserPassword" class="form-control" required>
+                                        <input type="password" name="edtUserPassword" id="edtUserPassword" class="form-control" required>
                                     </div>
                                     <div class="form-check form-switch d-flex align-items-center mb-3">
                                         <input class="form-check-input" type="checkbox" name="rememberMe" checked>
@@ -95,8 +95,14 @@
 
             $("#signInBtn").click(function () {
               // Validate username and password length
-              var username = $("#username").val();
-              var password = $("#password").val();
+              var username = $("#edtUsername").val();
+              var password = $("#edtUserPassword").val();
+
+              if (!username || !password) {
+                  // Display an error message if username or password is empty
+                  display_response("Please enter both username and password.", false);
+                  return;
+              }
 
               if (username.length < 6 || password.length < 6) {
                   // Display an error message for invalid length
@@ -121,6 +127,7 @@
                   },
               });
           });
+
 
             function display_response(message, success) {
                 var alertDiv = $("#alert");
