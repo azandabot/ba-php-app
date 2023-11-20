@@ -30,6 +30,7 @@ function process_sign($data)
 
                 $_SESSION['logged_user'] = $formdata['edtUsername'];
                 $_SESSION['logged_user_id'] = $client->getLoggedUserId($formdata['edtUsername']);
+                $_SESSION['logged_user_role'] = $client->getLoggedUserRole($formdata['edtUsername']);
 
                 echo json_encode([
                     'success' => true,
@@ -222,6 +223,79 @@ function process_menu($data)
                 ]);
                 exit();
             }
+        }
+    } catch (Exception $ex) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'An error occurred'
+        ]);
+        exit();
+    }
+}
+
+function process_user($data){
+    try {
+        $client = new BakeryDBClient;
+        $formdata = cleanFormData($data);
+
+        $operation = $formdata['operation'];
+
+        if ($operation === "1") {
+            # create
+            $res = $client->createUser($formdata['edtUsername'],  $formdata['edtEmail'], $formdata['edtPassword'], $formdata['edtRole']);
+            
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'User Created Successfully!',
+                ]);
+                exit();
+            }
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Could not Create User. Please try again later...'
+            ]);
+            exit();
+        } elseif ($operation === "3") {
+            # delete
+            $res = $client->deleteUser($formdata['edtUserId']);
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'User Deleted Successfully!',
+                    'reload' => true, 
+                ]);
+                exit();
+            }
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Could not Delete User. Please try again later...'
+            ]);
+            exit();
+        } else {
+            # edit - update
+            $res = $client->editUser(
+                $formdata['edtUserId'],
+                $formdata['edtUsername'],
+                $formdata['edtEmail'],
+                $formdata['edtPassword'],
+                $formdata['edtRole']
+            );
+            if ($res) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'User Details Updated Successfully!',
+                ]);
+                exit();
+            }
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Could not Update User Details. Please try again later...'
+            ]);
+            exit();
         }
     } catch (Exception $ex) {
         echo json_encode([

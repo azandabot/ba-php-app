@@ -1,3 +1,17 @@
+<?php
+
+    require_once 'scripts/dbconfig.php';
+    $client = new BakeryDBClient;
+
+    $stats = $client->getDashboardStats();
+    
+    while($s = $stats->fetch(PDO::FETCH_ASSOC)){
+        $orders = $s['aSysOrders'];
+        $deliveries = $s['aSysDeliveries'];
+        $discounts = $s['aSysDiscount'];
+        $inventory = $s['aSysInventory'];
+    }
+?>
 <div class="row">
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
         <div class="card">
@@ -12,7 +26,7 @@
         </div>
         <hr class="dark horizontal my-0">
         <div class="card-footer p-3">
-            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">0 </span>orders made</p>
+            <p class="mb-0"><span class="text-primary text-sm font-weight-bolder"><?php echo $orders; ?> </span>orders made</p>
         </div>
         </div>
     </div>
@@ -29,7 +43,7 @@
         </div>
         <hr class="dark horizontal my-0">
         <div class="card-footer p-3">
-            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">0 </span>deliveries made</p>
+            <p class="mb-0"><span class="text-primary text-sm font-weight-bolder"><?php echo $deliveries; ?> </span>deliveries made</p>
         </div>
         </div>
     </div>
@@ -46,7 +60,7 @@
         </div>
         <hr class="dark horizontal my-0">
         <div class="card-footer p-3">
-            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">0 </span>items discounted</p>
+            <p class="mb-0"><span class="text-primary text-sm font-weight-bolder"><?php echo $discounts; ?> </span>items discounted</p>
         </div>
         </div>
     </div>
@@ -63,7 +77,7 @@
         </div>
         <hr class="dark horizontal my-0">
         <div class="card-footer p-3">
-            <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">0</span> total stock</p>
+            <p class="mb-0"><span class="text-danger text-sm font-weight-bolder"><?php echo $inventory; ?></span> total stock</p>
         </div>
         </div>
     </div>

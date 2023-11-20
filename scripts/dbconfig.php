@@ -25,6 +25,19 @@ class BakeryDBClient {
         $this->con = null;
     }
 
+    # get dashboard stats
+    public function getDashboardStats(){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getDashboardStats';
+            $stmt = $con->prepare($query);
+            $stmt->execute();
+            return $stmt;
+        }catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
     # login the user
     public function userLogin($user, $pwd){
         try{
@@ -54,6 +67,46 @@ class BakeryDBClient {
             print_r($ex);
         }
     }
+
+    public function getLoggedUserRole($username){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getLoggedUserRole(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $username);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['aUserRole'];
+        }catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
+    public function getUsers(){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getUsers()';
+            $stmt = $con->prepare($query);
+            $stmt->execute();
+            return $stmt;
+        }catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
+    public function getUser($user_id){
+        try{
+            $con = $this->getConnection();
+            $query = 'CALL sp_getUser(?)';
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(1, $user_id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }catch(PDOException $ex){
+            print_r($ex);
+        }
+    }
+
 
     public function getOrdersForUser($user_id = null)
     {

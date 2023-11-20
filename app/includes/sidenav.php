@@ -1,19 +1,8 @@
 <?php
 
-    require_once 'scripts/functions.php';
+    require_once 'accounts_access.php';
 
     $currentRoute = ($logged_page != 'pages/index.php') ? $_GET['route'].'&tmpl_page='.$logged_page.'&page='.$page : 'dashboard.php'; 
-
-    $pages = [
-        'dashboard.php' => 'Dashboard',
-        'dashboard.php&tmpl_page=pages/orders.php&page=Orders' => 'Orders',
-        'dashboard.php&tmpl_page=pages/deliveries.php&page=Deliveries' => 'Deliveries',
-        'dashboard.php&tmpl_page=pages/dashboard-tracking.php&page=Tracking' => 'Tracking',
-        'dashboard.php&tmpl_page=pages/menus.php&page=Menus' => 'Menus',
-        'dashboard.php&tmpl_page=pages/manage-prices.php&page=Prices' => 'Prices',
-        'dashboard.php&tmpl_page=pages/menus.php&page=Discounts&tblView=discount' => 'Discounts',
-        'dashboard.php&tmpl_page=pages/inventory.php&page=Inventory' => 'Inventory'
-    ];
 
 ?>
 
@@ -28,7 +17,7 @@
     <hr class="horizontal light mt-0 mb-2">
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
-        <?php foreach ($pages as $url => $name) : ?>
+        <?php foreach ($pages as $name => $url) : ?>
             <li class="nav-item">
                 <a class="nav-link text-white <?php echo $url === $currentRoute ? 'active bg-gradient-faded-primary' : ''; ?>" href="index.php?route=<?php echo $url; ?>">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">

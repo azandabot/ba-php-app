@@ -54,12 +54,14 @@ $orders = $client->getAllOrders();
                                         <span class="text-secondary text-xs font-weight-bold"><?php echo $order['created_at']; ?></span>
                                     </td>
                                     <td class="align-middle">
-                                        <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-orders.php&page=Update Order&operation=2&orderId=<?php echo $order['id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit order">
-                                            <i class="fas fa-edit me-1"></i> Edit
-                                        </a>
-                                        <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-orders.php&page=Delete Order&operation=3&orderId=<?php echo $order['id']; ?>&order=<?= $order['item_name']; ?>" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete order">
-                                            <i class="fas fa-trash-alt ms-1"></i> Delete
-                                        </a>
+                                        <?php if($actions): ?>
+                                            <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-orders.php&page=Update Order&operation=2&orderId=<?php echo $order['id']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit order">
+                                                <i class="fas fa-edit me-1"></i> Edit
+                                            </a>
+                                            <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-orders.php&page=Delete Order&operation=3&orderId=<?php echo $order['id']; ?>&order=<?= $order['item_name']; ?>" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete order">
+                                                <i class="fas fa-trash-alt ms-1"></i> Delete
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

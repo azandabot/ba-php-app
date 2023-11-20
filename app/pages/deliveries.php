@@ -40,8 +40,10 @@ $deliveries = $client->getDeliveries();
                                 <td><?php echo $delivery['status']; ?></td>
                                 <td><?php echo $delivery['created_at']; ?></td>
                                 <td>
-                                    <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-delivery.php&page=Deliveries&operation=2&deliveryId=<?php echo $delivery['id']; ?>" class="btn btn-primary">Edit</a>
-                                    <a href="#" class="btn btn-danger font-weight-bold text-xs delete-delivery" data-delivery-id="<?php echo $delivery['id']; ?>">Delete</a>
+                                    <?php if($actions): ?>
+                                        <a href="index.php?route=dashboard.php&tmpl_page=pages/manage-delivery.php&page=Deliveries&operation=2&deliveryId=<?php echo $delivery['id']; ?>" class="btn btn-primary">Edit</a>
+                                        <a href="#" class="btn btn-danger font-weight-bold text-xs delete-delivery" data-delivery-id="<?php echo $delivery['id']; ?>">Delete</a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

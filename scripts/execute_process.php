@@ -8,9 +8,9 @@
         case 'menu':
             process_menu($_POST);
             break;
-
-
-        
+        case 'user':
+            process_user($_POST);
+            break;
         case 'order':
             process_order($_POST);
             break;
