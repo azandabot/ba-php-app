@@ -56,4 +56,4 @@ Let's break down the tasks you need to tackle to set up the application successf
 -   [x]  Price Management: Enable bakery owners to manage and adjust prices effortlessly.
 -   [x]  Discount Management: Implement a system for bakery owners to create and apply discounts.
 -   [x]  Inventory Management: Develop tools to keep track of bakery inventory accurately.
--   [ x]  Stock Management: Implement features for precise handling of bakery stock.
+-   [x]  Stock Management: Implement features for precise handling of bakery stock.
