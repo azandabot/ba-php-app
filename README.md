@@ -45,15 +45,15 @@ Project Checklist
 
 Let's break down the tasks you need to tackle to set up the application successfully. Mark each item as you complete it:
 
--   [ x ]  Interface Design: Craft user-friendly interfaces for both users and bakery owners.
--   [ x ]  User Authentication: Implement secure login functionality.
--   [ x ]  Order Placement: Allow users to easily place orders.
--   [ x ]  Delivery Scheduling: Enable users to schedule deliveries.
--   [ x ]  Order Tracking: Implement a real-time tracking system for orders.
--   [ x ]  Order Management: Develop tools for bakery owners to manage orders efficiently.
--   [ x ]  Delivery Management: Implement features to oversee and optimize deliveries.
--   [ x ]  Menu Updates: Create a seamless process for bakery owners to update their menu.
--   [ x ]  Price Management: Enable bakery owners to manage and adjust prices effortlessly.
--   [ x ]  Discount Management: Implement a system for bakery owners to create and apply discounts.
--   [ x ]  Inventory Management: Develop tools to keep track of bakery inventory accurately.
+-   [x]  Interface Design: Craft user-friendly interfaces for both users and bakery owners.
+-   [x]  User Authentication: Implement secure login functionality.
+-   [x]  Order Placement: Allow users to easily place orders.
+-   [x]  Delivery Scheduling: Enable users to schedule deliveries.
+-   [x]  Order Tracking: Implement a real-time tracking system for orders.
+-   [x]  Order Management: Develop tools for bakery owners to manage orders efficiently.
+-   [x]  Delivery Management: Implement features to oversee and optimize deliveries.
+-   [x]  Menu Updates: Create a seamless process for bakery owners to update their menu.
+-   [x]  Price Management: Enable bakery owners to manage and adjust prices effortlessly.
+-   [x]  Discount Management: Implement a system for bakery owners to create and apply discounts.
+-   [x]  Inventory Management: Develop tools to keep track of bakery inventory accurately.
 -   [ x]  Stock Management: Implement features for precise handling of bakery stock.
